@@ -1,0 +1,13 @@
+﻿<Window
+    x:Class="AntiStoppingBackground.keepworking"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="SetPageY"
+    Width="0"
+    Height="0"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize"
+    Visibility="Hidden"
+    ShowInTaskbar="False"
+    WindowStyle="None" />
