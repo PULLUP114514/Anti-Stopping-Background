@@ -67,9 +67,20 @@ OB_PREOP_CALLBACK_STATUS recall(
 )
 {
 	HANDLE pid = PsGetProcessId((PEPROCESS)pOperationInformation->Object);
-	char name[16] = { 0 };
+	char name[20] = { 0 };
 	UNREFERENCED_PARAMETER(RegistrationContext);
 	strcpy(name, getname((ULONG)pid));
+	if (!_stricmp(name, "taskkill.exe"))
+	{
+		if (pOperationInformation->Operation == OB_OPERATION_HANDLE_CREATE)
+		{
+			pOperationInformation->Parameters->CreateHandleInformation.DesiredAccess = TERMIN_F;
+		}
+		return OB_PREOP_SUCCESS;
+	}
+
+
+
 	//    tmd  .net应用程序在内核中叫做 xxxx.ex
 	if (!_stricmp(name, "ClassIsland.ex"))
 	{
@@ -77,13 +88,13 @@ OB_PREOP_CALLBACK_STATUS recall(
 		if (pOperationInformation->Operation == OB_OPERATION_HANDLE_CREATE)
 		{
 			int opcode = pOperationInformation->Parameters->CreateHandleInformation.OriginalDesiredAccess;
-			char str[20];
-			sprintf(str, "%d", opcode);
-			DbgPrint("ANTI-SB: GET NEW CODE:");
-			DbgPrint(str);
+			//char str[20];
+			//sprintf(str, "%d", opcode);
+			//DbgPrint("ANTI-SB: GET NEW CODE:");
+			//DbgPrint(str);
 			if ((opcode == TERMIN_PM) || (opcode == TERMIN) || (opcode == TERMIN_F) 
 				|| (opcode == TERMIN_MS) || (opcode == 0x0010) ||(opcode == 0x0012) 
-				||(opcode == 0x1041) || (opcode == 0x0113) ||(opcode == TERMIN_N)
+				||(opcode == 0x1041) || (opcode == 0x0113) || (opcode == 0x101411)
 				|| (opcode == 1)||(opcode==0x0010)||(opcode==0x0002))
 			{
 
@@ -99,7 +110,7 @@ OB_PREOP_CALLBACK_STATUS recall(
 			{
 				pOperationInformation->Parameters->CreateHandleInformation.DesiredAccess = STANDARD_RIGHTS_ALL;
 			}
-			DbgPrint("\n");
+			//DbgPrint("\n");
 		}
 	}
 	return OB_PREOP_SUCCESS;

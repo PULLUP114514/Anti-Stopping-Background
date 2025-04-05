@@ -22,9 +22,11 @@ namespace AntiStoppingBackground
         public keepworking()
         {
             InitializeComponent();
-            this.ShowInTaskbar = false;
-            this.WindowStyle = WindowStyle.None;
             this.Topmost = true;
+            this.Activate();
+            Focus();
+            this.Topmost = false;
+
         }
     }
 }

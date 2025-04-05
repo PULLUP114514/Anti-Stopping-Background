@@ -2,12 +2,15 @@ New-Item -ItemType Directory -Path .\publish -Force
 if (Test-Path -Path ".\publish\anti-sb.cipx") {
     Remove-Item -Path ".\publish\anti-sb.cipx" -Force
 }
-Compress-Archive -Path ".\bin\Release\net8.0-windows\" -DestinationPath ./publish/Anti-SB.cipx
+Remove-Item ".\bin\Release\net8.0-windows\*.pdb"
+Compress-Archive -Path ".\bin\Release\net8.0-windows\*" -DestinationPath "./publish/Anti-SB.cipx"
+
 
 $path="publish"
 
-echo $path
-rm $path/*.md5sum
+Write-Output $path
+Remove-Item $path/*.md5sum
+Remove-Item $path/*.md
 $files = Get-ChildItem $path
 $hashes = [ordered]@{}
 $summary = "

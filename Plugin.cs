@@ -25,13 +25,21 @@ namespace AntiStoppingBackground
         private const string sDriverPath10 = "Driver\\Win10\\Anti_Stopping_BackGround.sys";
         //private const string sDriverPath7 = "Driver\\Win7\\Anti_Stopping_BackGround.sys";
         private keepworking kKeepworkingWindow = new keepworking();
-        private void Timer_Elapsed(object sender, EventArgs e)
+        private static int iTimerCalc = 0;
+        private void vTimerElapsed(object sender, EventArgs e)
         {
+
             if (kKeepworkingWindow == null || !kKeepworkingWindow.IsLoaded)
             {
                 kKeepworkingWindow = new keepworking(); 
                 kKeepworkingWindow.Show();
             }
+            //if (iTimerCalc < 100)
+            //{
+            //    iTimerCalc++;
+            //    kKeepworkingWindow.Activate();
+            //    kKeepworkingWindow.Focus();
+            //}
         }
 
         private void vTestDialog(string sMessage)
@@ -104,6 +112,15 @@ namespace AntiStoppingBackground
             return sMatch.Success;
         }
 
+        private void vStartTimer()
+        {
+            //Thread.Sleep(2000);
+            //dtTimer = new DispatcherTimer();
+            //dtTimer.Interval = TimeSpan.FromSeconds(0.1);
+            //dtTimer.Tick += vTimerElapsed;
+            //dtTimer.Start();
+            return;
+        }
         public override void Initialize(HostBuilderContext context, IServiceCollection services)
         {
             Console.WriteLine("ANTI-SB-INSTALLER: Start Initalize Anti Stopping Background Driver");
@@ -147,10 +164,11 @@ namespace AntiStoppingBackground
             {
                 //ClassIsland.Core.Controls.CommonDialog.CommonDialog.ShowInfo(
                 //    $"installed");
-                dtTimer = new DispatcherTimer();
-                dtTimer.Interval = TimeSpan.FromSeconds(0.1);
-                dtTimer.Tick += Timer_Elapsed;
-                dtTimer.Start();
+                var app = AppBase.Current;
+
+                app.AppStarted += (o, args) => {
+                    vStartTimer();
+                };
                 return;
             }
 
